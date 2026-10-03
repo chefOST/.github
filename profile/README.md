@@ -14,7 +14,7 @@ VidOSC and TubeletGraph code currently lives on contributor branches, not `main`
 
 ## Contributing
 
-Use `<first-name>/<topic>` branches and focused PRs. Keep READMEs concise; link detailed docs through an index. See the [branch and documentation style guide](https://github.com/chefOST/.github-private/blob/main/CONTRIBUTING.md).
+Use `<first-name>/<topic>` branches. Keep READMEs concise; link verbose docs (ie. for agents / slop) through an index. See the [branch and documentation style guide](https://github.com/chefOST/.github-private/blob/main/CONTRIBUTING.md).
 
 ## Legacy and reference
 
