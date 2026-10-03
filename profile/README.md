@@ -2,6 +2,8 @@
 
 Tracking object states in cooking videos.
 
+Research: [project goals and paper reviews](https://github.com/chefOST/.github-private/blob/main/docs/PaperNotes.md). Agents should start with the goals, then read the relevant papers.
+
 ## Where to work
 
 - [vidosc](https://github.com/chefOST/vidosc): VidOSC adaptations and state descriptions.
