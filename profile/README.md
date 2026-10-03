@@ -4,8 +4,8 @@ Tracking object states in cooking videos.
 
 ## Where to work
 
-- [vidosc](https://github.com/chefOST/vidosc): VidOSC adaptations and state descriptions; [current evaluation branch](https://github.com/chefOST/vidosc/tree/michelle/feat/moscato-vidosc-claude-eval).
-- [tubletegraph](https://github.com/chefOST/tubletegraph): TubeletGraph adaptations and evaluation; [current branch](https://github.com/chefOST/tubletegraph/tree/justin/feat/tubeletgraph-moscato-cmu-s12).
+- [vidosc](https://github.com/chefOST/vidosc): VidOSC adaptations and state descriptions.
+- [tubletegraph](https://github.com/chefOST/tubletegraph): TubeletGraph adaptations and evaluation.
 - [oscar](https://github.com/chefOST/oscar): OSCAR adaptations and object-state prediction.
 - [chefOST-data](https://github.com/chefOST/chefOST-data): shared datasets; currently MOSCATO annotations/vocabularies via Git LFS. Shared evaluation tooling and Ego4D data are planned.
 - [ego4d-pseudo-labels](https://github.com/chefOST/ego4d-pseudo-labels): existing Ego4D pseudo-labeling prototype.
