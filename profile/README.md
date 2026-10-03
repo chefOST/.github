@@ -10,7 +10,11 @@ Tracking object states in cooking videos.
 - [chefOST-data](https://github.com/chefOST/chefOST-data): shared datasets; currently MOSCATO annotations/vocabularies via Git LFS. Shared evaluation tooling and Ego4D data are planned.
 - [ego4d-pseudo-labels](https://github.com/chefOST/ego4d-pseudo-labels): existing Ego4D pseudo-labeling prototype.
 
-Use `<first-name>/<topic>` branches in the relevant model repo and PRs for shared changes; separate model approaches belong in separate repos. VidOSC and TubeletGraph code currently lives on contributor branches, not `main`.
+VidOSC and TubeletGraph code currently lives on contributor branches, not `main`.
+
+## Contributing
+
+Use `<first-name>/<topic>` branches and focused PRs. Keep READMEs concise; link detailed docs through an index. See the [branch and documentation style guide](https://github.com/chefOST/.github-private/blob/main/CONTRIBUTING.md).
 
 ## Legacy and reference
 
