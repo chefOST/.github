@@ -19,7 +19,7 @@ Current work evaluates TubeletGraph and adapted OSCAR on MOSCATO, explores VidOS
 - [MOSCATO](#7-moscato): current multi-object state benchmark and data context.
 - [FluxGraph](#newer-candidate-fluxgraph): a newer efficiency follow-up, not yet fully reviewed here.
 
-Agents: read the goals and relevant paper entries, then follow primary sources for exact claims. These are literature results, not ChefOST reproduction results. The original review's details are preserved except where corrections are identified; this is a targeted reconciliation, not a complete independent replication or exhaustive literature search. Use the [organization guide](https://github.com/chefOST/.github-private/blob/main/profile/README.md) to choose a repository, then read its README and applicable `AGENTS.md` for implementation instructions.
+Agents: read the goals and relevant paper entries, then follow primary sources for exact claims. These are literature results, not ChefOST reproduction results. The original review's details are preserved except where corrections are identified; this is a targeted reconciliation, not a complete independent replication or exhaustive literature search. Use the [organization guide](https://github.com/chefOST/.github/blob/main/profile/README.md) to choose a repository, then read its README and applicable `AGENTS.md` for implementation instructions.
 
 ## Reconciliation with current work
 
