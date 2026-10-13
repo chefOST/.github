@@ -6,7 +6,7 @@ The canonical reference for relevant papers and project goals. Converted from th
 
 Track individual object states throughout long procedural cooking videos. Recognizing the current state is in scope; anticipating future states is not. Prioritize consistency, then accurate detail without hallucination or partial correctness, then inference speed.
 
-Current work evaluates TubeletGraph and adapted OSCAR on MOSCATO, explores VidOSC + VLM/Claude descriptions beyond fixed initial/transition/end phases, and develops lightweight Ego4D pseudo-labels per frame or at a documented interval. Start with one state adjective per object/timepoint; richer descriptions are an extension. Long-term, preserve identity across multiple objects and transformations. Video-duration thresholds and a shared scoring protocol remain undecided; current baselines do not yet establish the full long-video goal.
+Current work evaluates TubeletGraph and adapted OSCAR on MOSCATO, explores VidOSC + VLM/Claude descriptions beyond fixed initial/transition/end phases, and develops lightweight Ego4D pseudo-labels per frame or at a documented interval. Surface multiple applicable states per object/timepoint; evaluate frame-averaged precision and recall (detail). Long-term, preserve identity across multiple objects and transformations. Video-duration thresholds and remaining evaluation conventions are undecided; current baselines do not yet establish the full long-video goal.
 
 ## Where to look
 
@@ -23,9 +23,9 @@ Agents: read the goals and relevant paper entries, then follow primary sources f
 
 ## Reconciliation with current work
 
-- MOSCATO ground truth can contain multiple simultaneous states. One predicted adjective is the initial ChefOST output format, not a claim that the data has one label. Proposed, not agreed: count a prediction as correct if it belongs to the object's annotated state set at that time. This is not equivalent to the paper's metrics. Sampling, frame alignment, label normalization, empty-label handling and aggregation remain unspecified; some vocabulary entries are phrases rather than single adjectives.
+- MOSCATO ground truth can contain multiple simultaneous states. For each object/frame, let `P_t` be the predicted state set and `T_t` the ground-truth state set. ChefOST precision is `|P_t ∩ T_t| / |P_t|`, averaged over frames with predictions; recall (detail) is `|P_t ∩ T_t| / |T_t|`, averaged over frames where the object is present. Average per-frame ratios equally; missing predictions give zero recall when GT states exist. These are multilabel precision/recall, distinct from the paper's metrics. Sampling, frame alignment, label normalization, empty-GT/no-eligible-frame handling and aggregation across objects/videos remain unspecified; some state labels are phrases.
 - [chefOST-data](https://github.com/chefOST/chefOST-data) currently holds MOSCATO annotations/vocabularies, including CMU, EGTEA and EgoPER. EgoPER is distinct from Ego4D; shared Ego4D definitions/evaluation remain planned.
-- Correct state predictions per frame/second is a tentative quality measure. Offline temporal context must not be presented as causal online tracking.
+- Frame-averaged precision measures correctness of predicted states; recall (detail) measures coverage of ground-truth states. Offline temporal context must not be presented as causal online tracking.
 
 ## Literature selection
 
@@ -206,7 +206,7 @@ Zameni, Shen, and Elhamifar. [MOSCATO: Predicting Multiple Object State Change T
 - Task: Recognize framewise states of multiple objects throughout long cooking videos; multiple states may apply simultaneously. This concerns observed-video state recognition despite “predicting” in the title.
 - Method/supervision: Training action annotations feed an LLM/VLM Pseudo-Label Acquisition pipeline; a Multiple Object State Prediction network learns from those labels, and State–Action Interaction refines state predictions using predicted actions. [Paper](https://openaccess.thecvf.com/content/ICCV2025/papers/Zameni_MOSCATO_Predicting_Multiple_Object_State_Change_Through_Actions_ICCV_2025_paper.pdf).
 - Data: CMU, EGTEA and EgoPER; automatically generated training labels and manually annotated test ground truth. The release describes state arrays on a 10 fps annotation timeline, not the raw video's frame rate. [Dataset documentation](https://github.com/eelhami/iccv25_moscato).
-- Metrics: Framewise F1-max/mAP and temporal segment F1 at overlap thresholds 0.1, 0.25 and 0.5. They are not interchangeable with ChefOST's proposed single-adjective/set-membership score. [Evaluation documentation](https://github.com/eelhami/iccv25_moscato).
+- Metrics: Framewise F1-max/mAP and temporal segment F1 at overlap thresholds 0.1, 0.25 and 0.5. They are not interchangeable with ChefOST's frame-averaged multilabel precision and recall (detail). [Evaluation documentation](https://github.com/eelhami/iccv25_moscato).
 - ChefOST relevance: The local `MOSCATO/` copy and `chefOST-data/MOSCATO/` provide annotations/vocabularies, not videos, features or the paper's model implementation. Check [current evaluation questions](#reconciliation-with-current-work) for alignment, normalization and scoring issues. This is a multi-state benchmark, not evidence of persistent instance lineage.
 
 ## Newer candidate: FluxGraph
