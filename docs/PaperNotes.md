@@ -23,10 +23,9 @@ Agents: read the goals and relevant paper entries, then follow primary sources f
 
 ## Reconciliation with current work
 
-- The original OSCAR is a recipe-progress pipeline using pretrained models and rules. ChefOST's trainable object-state adaptation is separate; its capabilities/results cannot be attributed to the paper.
 - MOSCATO ground truth can contain multiple simultaneous states. One predicted adjective is the initial ChefOST output format, not a claim that the data has one label. Proposed, not agreed: count a prediction as correct if it belongs to the object's annotated state set at that time. This is not equivalent to the paper's metrics. Sampling, frame alignment, label normalization, empty-label handling and aggregation remain unspecified; some vocabulary entries are phrases rather than single adjectives.
 - [chefOST-data](https://github.com/chefOST/chefOST-data) currently holds MOSCATO annotations/vocabularies, including CMU, EGTEA and EgoPER. EgoPER is distinct from Ego4D; shared Ego4D definitions/evaluation remain planned.
-- Correct state predictions per frame/second is a tentative quality measure; wall-clock latency and throughput measure speed separately. Offline temporal context must not be presented as causal online tracking.
+- Correct state predictions per frame/second is a tentative quality measure. Offline temporal context must not be presented as causal online tracking.
 
 ## Literature selection
 
