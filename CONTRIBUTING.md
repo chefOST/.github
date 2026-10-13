@@ -19,7 +19,7 @@ Aim for roughly 150–250 words, excluding essential commands. Shorter is better
 3. Required data, access or Git LFS instructions, or a direct link to them.
 4. A documentation index and contribution/agent instructions.
 
-Use plain headings, short paragraphs and bullets. Move architecture, full configuration, results, experiment history and troubleshooting into linked documents. Avoid badge walls, duplicated explanations and unverified commands. Keep essential public setup information accessible without the private org guide.
+Use plain headings, short paragraphs and bullets. Move architecture, full configuration, results, experiment history and troubleshooting into linked documents. Avoid badge walls, duplicated explanations and unverified commands. Keep essential setup instructions in each repository; link to this public guide for shared conventions.
 
 ## Short entry point, detailed docs
 
