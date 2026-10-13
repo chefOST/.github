@@ -2,7 +2,7 @@
 
 Tracking object states in cooking videos.
 
-Research: [project goals and paper reviews](https://github.com/chefOST/.github-private/blob/main/docs/PaperNotes.md). Agents should start with the goals, then read the relevant papers.
+Research: [project goals and paper reviews](https://github.com/chefOST/.github/blob/main/docs/PaperNotes.md). Agents should start with the goals, then read the relevant papers.
 
 ## Where to work
 
@@ -16,7 +16,7 @@ VidOSC and TubeletGraph code currently lives on contributor branches, not `main`
 
 ## Contributing
 
-Use `<first-name>/<topic>` branches. Keep READMEs concise; link verbose docs (ie. for agents / slop) through an index. See the [branch and documentation style guide](https://github.com/chefOST/.github-private/blob/main/CONTRIBUTING.md).
+Use `<first-name>/<topic>` branches. Keep READMEs concise; link verbose docs (ie. for agents / slop) through an index. See the [branch and documentation style guide](https://github.com/chefOST/.github/blob/main/CONTRIBUTING.md).
 
 ## Legacy and reference
 
