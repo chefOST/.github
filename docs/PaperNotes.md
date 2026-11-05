@@ -6,7 +6,7 @@ The canonical reference for relevant papers and project goals. Converted from th
 
 Track individual object states throughout long procedural cooking videos. Recognizing the current state is in scope; anticipating future states is not. Prioritize consistency, then accurate detail without hallucination or partial correctness, then inference speed.
 
-Current work evaluates TubeletGraph and adapted OSCAR on MOSCATO, explores VidOSC + VLM/Claude descriptions beyond fixed initial/transition/end phases, and develops lightweight Ego4D pseudo-labels per frame or at a documented interval. Surface multiple applicable states per object/timepoint; evaluate frame-averaged precision and recall (detail). Long-term, preserve identity across multiple objects and transformations. Video-duration thresholds and remaining evaluation conventions are undecided; current baselines do not yet establish the full long-video goal.
+Current work evaluates TubeletGraph and adapted OSCAR on MOSCATO, explores VidOSC + VLM/Claude descriptions beyond fixed initial/transition/end phases, and develops lightweight Ego4D pseudo-labels per frame or at a documented interval. Surface multiple applicable states per object/timepoint; evaluate frame-averaged precision, recall (detail), cosine similarity and state-change timing F1. Long-term, preserve identity across multiple objects and transformations. Video-duration thresholds and remaining evaluation conventions are undecided; current baselines do not yet establish the full long-video goal.
 
 ## Where to look
 
@@ -24,6 +24,7 @@ Agents: read the goals and relevant paper entries, then follow primary sources f
 ## Reconciliation with current work
 
 - MOSCATO ground truth can contain multiple simultaneous states. For each object/frame, let `P_t` be the predicted state set and `T_t` the ground-truth state set. ChefOST precision is `|P_t ∩ T_t| / |P_t|`, averaged over frames with predictions; recall (detail) is `|P_t ∩ T_t| / |T_t|`, averaged over frames where the object is present. Average per-frame ratios equally; missing predictions give zero recall when GT states exist. These are multilabel precision/recall, distinct from the paper's metrics. Sampling, frame alignment, label normalization, empty-GT/no-eligible-frame handling and aggregation across objects/videos remain unspecified; some state labels are phrases.
+- ChefOST also uses cosine similarity and adds timing-only state-change F1: match events one-to-one within ±one population standard deviation of GT inter-change gaps, shared by all models on the fixed evaluation split. See the [shared evaluation specification](Evaluation.md) for event extraction, tolerance, F1 and reporting rules. Cosine embedding/comparison/aggregation choices remain experiment-specific.
 - [chefOST-data](https://github.com/chefOST/chefOST-data) currently holds MOSCATO annotations/vocabularies, including CMU, EGTEA and EgoPER. EgoPER is distinct from Ego4D; shared Ego4D definitions/evaluation remain planned.
 - Frame-averaged precision measures correctness of predicted states; recall (detail) measures coverage of ground-truth states. Offline temporal context must not be presented as causal online tracking.
 
