@@ -2,7 +2,7 @@
 
 Tracking object states in cooking videos.
 
-Research: [project goals and paper reviews](https://github.com/chefOST/.github/blob/main/docs/PaperNotes.md). Agents should start with the goals, then read the relevant papers.
+Research: [project goals and paper reviews](https://github.com/chefOST/.github/blob/main/docs/PaperNotes.md). Agents should start with the goals, then read the relevant papers. Shared metrics: [evaluation specification](https://github.com/chefOST/.github/blob/main/docs/Evaluation.md). Details: [documentation index](https://github.com/chefOST/.github/blob/main/docs/README.md).
 
 ## Where to work
 
