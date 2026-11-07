@@ -1,44 +1,31 @@
-# Branch and documentation style
+# Shared guidance
 
-Keep contributions focused and documentation as concise as possible.
+## Authority
 
-## Branches
+The `main` branches of ChefOST repositories are the shared source of truth. Read the relevant repository's `main` README and this guide before working, even when the checkout is on another branch. Explicit user instructions take precedence. A branch-local document, local copy or agent response does not establish shared policy.
 
-- New work: `<first-name>/<short-topic>`, lowercase with hyphens, e.g. `harrison/eval-alignment`. The name identifies the lead; others can contribute.
-- Keep existing contributor-named branches, including migrated names such as `michelle/feat/moscato-vidosc-claude-eval`.
-- Work in the relevant model repository. Use one coherent change per branch and PR; describe the change, validation and intended merge target.
-- Branch from the code you are extending. While `vidosc` and `tubletegraph` have empty `main` branches, use the relevant populated contributor branch and target it in PRs until a shared baseline is established.
-- Coordinate before rebasing or force-pushing a shared branch. Preserve migrated history; do not rename or rewrite branches just to satisfy this guide.
+- [Organization](profile/README.md): repository purposes and shared links.
+- [PaperNotes](docs/PaperNotes.md): project goals and literature.
+- [Evaluation](docs/Evaluation.md): shared metric definitions.
+- [chefOST-data](https://github.com/chefOST/chefOST-data/blob/main/README.md): annotations, vocabularies and R2 video access.
+- Each model repository's `main` README: its W&B destinations.
 
-## Repository READMEs
+Link to these sources instead of copying their contents. Resolve conflicting claims with the user before changing shared definitions. Do not infer a new project decision from an implementation or experiment.
 
-Aim for roughly 150–250 words, excluding essential commands. Shorter is better when it still lets someone start working. Include only:
+## Documentation
 
-1. Purpose and current status; distinguish working features from plans. Identify the usable branch when `main` is empty.
-2. The shortest verified setup/run example, with essential prerequisites and expected output. For data repositories, show how to obtain and use the data instead.
-3. Required data, access or Git LFS instructions, or a direct link to them.
-4. A documentation index and contribution/agent instructions.
+Keep documentation concise and timeless. A model README contains its purpose and links to shared guidance, data, evaluation and its W&B projects. It must not claim that a contributor branch is the implementation everyone should use.
 
-Use plain headings, short paragraphs and bullets. Move architecture, full configuration, results, experiment history and troubleshooting into linked documents. Avoid badge walls, duplicated explanations and unverified commands. Keep essential setup instructions in each repository; link to this public guide for shared conventions.
+Do not create or retain dated notes, status reports, plans, handoffs, run diaries, migration records, historical summaries, publication drafts, archival copies or detailed implementation/setup/run guides. Delete superseded documentation. Do not replace it with a record of the cleanup. Bibliographic years and paper versions identify scientific sources; they are not project status.
 
-## Short entry point, detailed docs
+Keep repository `AGENTS.md` files short: direct agents to the canonical `main` README and this guide. Do not duplicate shared rules, metric definitions or data-access instructions. Add a documentation index only when it organizes substantive shared references; do not add navigation-only layers.
 
-Use `README.md → docs/README.md → task-specific documents`. Prefer links over long collapsed sections: they keep both the page and the initial agent context small.
+## Data and outputs
 
-The README needs just one discovery line, once those files exist:
+Use annotations and vocabularies from `chefOST-data/main` and videos from its linked R2 location. Keep credentials, downloaded data, features, checkpoints, environments and generated outputs out of ordinary Git history.
 
-```markdown
-Details: [documentation](docs/README.md). Agents: [instructions](AGENTS.md).
-```
+Runs, predictions, scores and artifacts belong in the model's W&B projects linked from its `main` README. Store code/data revisions, configuration and metric details with the run in W&B, not in repository run reports. Do not describe inference outputs as evaluation scores.
 
-Make `docs/README.md` a small index: one descriptive link per topic, with when to read it. Create only documents the repository needs. Suggested topics:
+## Code changes
 
-- Setup: installation, environment and troubleshooting.
-- Architecture: components and extension points.
-- Data: schemas, versions and preparation; link shared definitions in `chefOST-data`.
-- Evaluation: commands, splits, metrics, alignment rules and expected outputs.
-- Experiments: dated results, exact code/data revisions and reproducible configurations.
-
-Keep repository-local agent instructions in a short root `AGENTS.md`. Direct agents to the README, then the index and documents relevant to their task; include necessary local commands, checks and constraints. Do not copy the entire project history there. The org guide is not automatically inherited by other repositories or agents.
-
-Use relative links within a repository so docs follow its branch. Link only existing files; label proposed work explicitly. Keep one authoritative explanation per topic, link to it elsewhere, and update affected docs/index entries in the same PR as the code.
+Use `<first-name>/<short-topic>` branches in the relevant repository. Keep changes focused and validate the behavior they affect. Use PRs for shared code changes; coordinate before rewriting a shared branch. Shared documentation changes belong on `main`.

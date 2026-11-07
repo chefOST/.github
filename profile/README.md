@@ -1,25 +1,19 @@
 # ChefOST
 
-Tracking object states in cooking videos.
+Track individual object states in cooking videos.
 
-Research: [project goals and paper reviews](https://github.com/chefOST/.github/blob/main/docs/PaperNotes.md). Agents should start with the goals, then read the relevant papers. Shared metrics: [evaluation specification](https://github.com/chefOST/.github/blob/main/docs/Evaluation.md). Details: [documentation index](https://github.com/chefOST/.github/blob/main/docs/README.md).
+[Goals and papers](https://github.com/chefOST/.github/blob/main/docs/PaperNotes.md) · [Evaluation](https://github.com/chefOST/.github/blob/main/docs/Evaluation.md) · [Shared guidance](https://github.com/chefOST/.github/blob/main/CONTRIBUTING.md)
 
-## Where to work
+## Repositories
 
-- [vidosc](https://github.com/chefOST/vidosc): VidOSC adaptations and state descriptions.
-- [tubletegraph](https://github.com/chefOST/tubletegraph): TubeletGraph adaptations and evaluation.
-- [oscar](https://github.com/chefOST/oscar): OSCAR adaptations and object-state prediction.
-- [chefOST-data](https://github.com/chefOST/chefOST-data): MOSCATO annotations/vocabularies via Git LFS and [shared ground-truth videos on R2](https://github.com/chefOST/chefOST-data#videos). Read-only video credentials were sent in the private team Discord channel. Shared evaluation tooling and Ego4D data are planned.
-- [ego4d-pseudo-labels](https://github.com/chefOST/ego4d-pseudo-labels): existing Ego4D pseudo-labeling prototype (private).
+- [vidosc](https://github.com/chefOST/vidosc): VidOSC.
+- [tubletegraph](https://github.com/chefOST/tubletegraph): TubeletGraph.
+- [oscar](https://github.com/chefOST/oscar): OSCAR.
+- [spoc](https://github.com/chefOST/spoc): SPOC.
+- [mosp](https://github.com/chefOST/mosp): MOSP.
+- [frontier-llm](https://github.com/chefOST/frontier-llm): frontier-model experiments.
+- [ego4d-pseudo-labels](https://github.com/chefOST/ego4d-pseudo-labels): Ego4D pseudo-labeling.
+- [chefOST-data](https://github.com/chefOST/chefOST-data): annotations, vocabularies and [R2 video access](https://github.com/chefOST/chefOST-data#videos).
+- [chefOST-site](https://github.com/chefOST/chefOST-site): website.
 
-VidOSC and TubeletGraph code currently lives on contributor branches, not `main`.
-
-## Contributing
-
-Use `<first-name>/<topic>` branches. Keep READMEs concise; link detailed documentation through an index. See the [branch and documentation style guide](https://github.com/chefOST/.github/blob/main/CONTRIBUTING.md).
-
-## Legacy and reference
-
-`VIDOSC-pipeline` (private) is deprecated for new work; use `vidosc`. `chefOST-ml` (private) retains older mixed experiments; continue model work in the repos above. Raf’s original data pipeline remains on [chefOST-data/raf/dataset-generation](https://github.com/chefOST/chefOST-data/tree/raf/dataset-generation).
-
-[spoc](https://github.com/chefOST/spoc) is a research reference; [chefOST-site](https://github.com/chefOST/chefOST-site) is the demo placeholder (private).
+Use each repository's `main` README for shared guidance and W&B destinations. Shared definitions come from `main`; contributor branches do not establish organization-wide instructions.

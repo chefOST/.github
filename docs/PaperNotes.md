@@ -1,12 +1,12 @@
 # ChefOST: A review on object state tracking
 
-The canonical reference for relevant papers and project goals. Converted from the supplied nine-page `ChefOST - A Review on Object State Tracking.pdf` and reconciled with project knowledge on October 3, 2026. The six original reviews are retained, with targeted source corrections and additions below.
+Project goals and literature on object state tracking. Published paper results do not establish results for ChefOST adaptations.
 
 ## Project goals
 
 Track individual object states throughout long procedural cooking videos. Recognizing the current state is in scope; anticipating future states is not. Prioritize consistency, then accurate detail without hallucination or partial correctness, then inference speed.
 
-Current work evaluates TubeletGraph and adapted OSCAR on MOSCATO, explores VidOSC + VLM/Claude descriptions beyond fixed initial/transition/end phases, and develops lightweight Ego4D pseudo-labels per frame or at a documented interval. Surface multiple applicable states per object/timepoint; evaluate frame-averaged precision, recall (detail), cosine similarity and state-change timing F1. Long-term, preserve identity across multiple objects and transformations. Video-duration thresholds and remaining evaluation conventions are undecided; current baselines do not yet establish the full long-video goal.
+Surface multiple applicable states per object and timepoint, and preserve identity across objects and transformations. Evaluate state correctness, detail, semantic similarity, state-change timing and inference speed using the [shared evaluation definitions](Evaluation.md).
 
 ## Where to look
 
@@ -16,41 +16,19 @@ Current work evaluates TubeletGraph and adapted OSCAR on MOSCATO, explores VidOS
 - [OSCAR](#4-oscar): object-status descriptions for recipe progress.
 - [Jelodar et al.](#5-image-based-object-states): image-based state taxonomy/classification.
 - [TubeletGraph](#6-tubeletgraph): object lineage and transformation graphs.
-- [MOSCATO](#7-moscato): current multi-object state benchmark and data context.
-- [FluxGraph](#newer-candidate-fluxgraph): a newer efficiency follow-up, not yet fully reviewed here.
+- [MOSCATO](#7-moscato): multi-object state recognition and data context.
+- [FluxGraph](#fluxgraph): efficient transformation tracking.
 
-Agents: read the goals and relevant paper entries, then follow primary sources for exact claims. These are literature results, not ChefOST reproduction results. The original review's details are preserved except where corrections are identified; this is a targeted reconciliation, not a complete independent replication or exhaustive literature search. Use the [organization guide](https://github.com/chefOST/.github/blob/main/profile/README.md) to choose a repository, then read its README and applicable `AGENTS.md` for implementation instructions.
+Read the goals and relevant paper entries, then follow primary sources for exact claims. Use the [organization guide](../profile/README.md) for repository links and the [shared guidance](../CONTRIBUTING.md) for project rules.
 
-## Reconciliation with current work
+## Evaluation context
 
-- MOSCATO ground truth can contain multiple simultaneous states. For each object/frame, let `P_t` be the predicted state set and `T_t` the ground-truth state set. ChefOST precision is `|P_t ∩ T_t| / |P_t|`, averaged over frames with predictions; recall (detail) is `|P_t ∩ T_t| / |T_t|`, averaged over frames where the object is present. Average per-frame ratios equally; missing predictions give zero recall when GT states exist. These are multilabel precision/recall, distinct from the paper's metrics. For these framewise metrics, sampling, frame alignment, label normalization, empty-GT/no-eligible-frame handling and aggregation across objects/videos remain unspecified; some state labels are phrases.
-- ChefOST also uses cosine similarity and adds timing-only state-change F1: match events one-to-one within ±one population standard deviation of GT inter-change gaps, shared by all models on the fixed evaluation split. See the [shared evaluation specification](Evaluation.md) for event extraction, tolerance, F1 and reporting rules. Cosine embedding/comparison/aggregation choices remain experiment-specific.
-- [chefOST-data](https://github.com/chefOST/chefOST-data) currently holds MOSCATO annotations/vocabularies, including CMU, EGTEA and EgoPER. EgoPER is distinct from Ego4D; shared Ego4D definitions/evaluation remain planned.
-- Frame-averaged precision measures correctness of predicted states; recall (detail) measures coverage of ground-truth states. Offline temporal context must not be presented as causal online tracking.
-
-## Literature selection
-
-Historical seed order from the PDF, not the current implementation priority:
-
-1. [Xue et al. — Learning Object State Changes in Videos: An Open-World Perspective](https://arxiv.org/html/2312.11782) (2023 preprint; CVPR 2024).
-2. [Mandikal et al. — SPOC](https://arxiv.org/abs/2503.11953v2) (2025 preprint; accepted at WACV 2026).
-3. [Manousaki et al. — Anticipating Object State Changes in Long Procedural Videos](https://arxiv.org/html/2405.12789v2) (2024; contextual evidence only, outside tracking scope).
-4. [Li et al. — OSCAR](https://arxiv.org/pdf/2507.03330) (2025).
-
-Additional candidates:
-
-- [Jelodar et al. — Identifying Object States in Cooking-Related Images](https://arxiv.org/abs/1805.06956) (2018).
-- [Li et al. — OSCAR, ASSETS 2025](https://doi.org/10.1145/3663547.3746318); the proceedings version of the same work as the preprint, not a second method. DOI corrected from the PDF.
-- [Sun et al. — Tracking and Understanding Object Transformations](https://proceedings.neurips.cc/paper_files/paper/2025/file/7482e8ce4139df1a2d8195a0746fa713-Paper-Conference.pdf) (NeurIPS 2025).
-
-Original search criteria: nonduplicate methods and papers not cited by more relevant/successful work. Google Scholar/arXiv queries: object state tracking; object state; ingredient tracking; object procedural videos; ingredient state; ingredient state tracking.
+MOSCATO supports simultaneous object states. Use the [evaluation specification](Evaluation.md) for ChefOST metrics and the [data repository](https://github.com/chefOST/chefOST-data/blob/main/README.md) for annotations and alignment. EgoPER and Ego4D are distinct datasets. Wall-clock latency and throughput measure speed separately from accuracy. Offline temporal context must not be presented as causal online tracking.
 
 ## Cross-paper findings
 
-The supplied document marks its notes human reviewed and links a [paper comparison](https://opposite-utensil-214.notion.site/Paper-Comparison-Table-39d4e041d9ac8085a75ac6cc8e1d441c).
-
 - Tasks differ: VidOSC labels temporal phases; SPOC segments state regions; TubeletGraph preserves lineage; OSCAR tracks recipe steps; Jelodar classifies images; OSCA anticipates future states.
-- Metrics are not directly comparable: classification F1/P@1/top-k, segmentation mIoU, VOS J and step accuracy do not form a fair leaderboard. Of the six original reviews, only TubeletGraph includes a numerical runtime; the newer FluxGraph candidate also addresses efficiency.
+- Metrics are not directly comparable: classification F1/P@1/top-k, segmentation mIoU, VOS J and step accuracy do not form a fair leaderboard. TubeletGraph and FluxGraph report inference efficiency; compare their timing protocols before comparing speed.
 - Common assumptions: known object/change/recipe or initial mask, one dominant transformation, short or pre-segmented clips, and mostly ordered/irreversible state evolution.
 - Research gap: boundary-free, multi-object, identity-preserving tracking over long cooking videos, evaluated for consistency, detail, hallucination/error type and throughput.
 
@@ -95,7 +73,7 @@ Mandikal et al. [SPOC: Spatially-Progressing Object State Change Segmentation in
 - Pretraining: GroundingDINO, SAM, DeAOT, CLIP ViT-B/32, DINOv2.
 - Baselines: MaskCLIP, MaskCLIP+, GroundedSAM, SAM-Track, Random Label, DEVA; v2 also includes SAM+GPT-4o.
 - Metrics: mIoU on full/transition and seen/novel splits; progress curves as downstream analysis.
-- Main results: WhereToChange-HowTo mIoU .502; v2 Table 2's SAM+GPT-4o baseline reaches .427 (DEVA .282, the comparator in the supplied review). WhereToChange-VOST .267 versus DEVA .228; seen/novel .523/.492; transition-only .332.
+- Main results: WhereToChange-HowTo mIoU .502; v2 Table 2's SAM+GPT-4o baseline reaches .427 (DEVA .282). WhereToChange-VOST .267 versus DEVA .228; seen/novel .523/.492; transition-only .332.
 - Ablation findings: Detecting every 10 frames beats first-frame-only (.411/.372); global+local features beat either alone for chop/grate/peel; trained model .502, pseudo-label prediction .455, oracle proposals .650.
 - Strengths: Finest state detail here; captures intra-object progress; cooking-specific; produces a useful continuous progress signal.
 - Limitations: Merged proposals may span both states; tracking loses rapidly changing objects; one known OSC and separate model per transition verb; no persistent ingredient lineage or speed report.
@@ -106,7 +84,7 @@ Mandikal et al. [SPOC: Spatially-Progressing Object State Change Segmentation in
 
 ### 3. OSCA
 
-Manousaki et al. [Anticipating Object State Changes in Long Procedural Videos](https://arxiv.org/abs/2405.12789), 2024. The supplied review cites [v2](https://arxiv.org/html/2405.12789v2), whose displayed title is shortened to *Anticipating Object State Changes*; v3 is now available. The detailed notes below follow the cited v2.
+Manousaki et al. [Anticipating Object State Changes](https://arxiv.org/html/2405.12789v2), 2024. These notes describe v2.
 
 - Research problem: Predict which OSC will occur during the next unseen action.
 - Input: Current/recent SlowFast visual features plus histories of action verbs/nouns and object-state labels.
@@ -158,9 +136,9 @@ Jelodar, Salekin, and Sun. [Identifying Object States in Cooking-Related Images]
 
 - Research problem: Recognize visually distinct cooking-object states from still images.
 - Input: One image; object identity is effectively known for object-specific models.
-- Output: One of 11 labels: whole, peeled, floured, sliced, diced, grated, julienne, juice, creamy, mixed, or other. The PDF review's `minced` is corrected to `mixed`.
+- Output: One of 11 labels: whole, peeled, floured, sliced, diced, grated, julienne, juice, creamy, mixed, or other.
 - Task formulation: Closed-set single-image multiclass classification, generic or per object.
-- Dataset: 9,309 web-crawled images of 17 common objects; 6,498 train, 1,398 validation, 1,413 test (§III-B). More than 250 cooking videos informed object/state selection. The PDF review transposed the training count to 6,489.
+- Dataset: 9,309 web-crawled images of 17 common objects; 6,498 train, 1,398 validation, 1,413 test (§III-B). More than 250 cooking videos informed object/state selection.
 - Supervision type: Fully supervised manual class labels.
 - Model architecture: ImageNet ResNet trunk plus added convolution/BN/ReLU/GAP/softmax head; generic model, object-specific fine-tuning, and three-model weighted voting.
 - Training objective: Supervised softmax classification; the paper does not name the loss explicitly.
@@ -191,8 +169,8 @@ Sun, Yang, Sun, and Hariharan. [Tracking and Understanding Object Transformation
 - Pretraining: CropFormer, SAM2.1-L, FC-CLIP/CLIP, GPT-4.1.
 - Baselines: XMem, Cutie, ReVOS, SAM2, SAM2Long, SAM2.1, DAM4SAM, SAMURAI, and SAM2.1 fine-tuned on VOST.
 - Metrics: Jaccard J over the full video and last 25%; pixel precision/recall; temporal localization P/R; action/object semantic accuracy; spatiotemporal and overall recall.
-- Main results in the supplied review: TubeletGraph J/J-last: VOST 51.0/36.9, VSCOS 75.9/72.2, M³-VOS 74.2/64.4, DAVIS17 85.6/82.5. Updated v2 Table 2 reports 50.9/36.7, 75.9/72.2, 74.1/64.1 and 85.6/82.6 respectively; do not mix versions. Full system: action/object accuracy 81.8/72.3, temporal P/R 43.1/20.4, spatiotemporal recall 12.0, overall recall 6.5. Semantic accuracies are conditional on successful temporal/spatial matches, not end-to-end state accuracy (v2 §4.2).
-- Ablation findings in the supplied review: Spatiotemporal partition+filters improve base SAM2.1 VOST J/J-last 48.4/32.4→51.0/36.9 (v2's full result is 50.9/36.7). SAM auto-masks, Cutie tracking, DINOv2 filtering, or Qwen reasoning reduce overall recall to 0.9/2.8/5.6/1.9, versus 6.5 full.
+- Main results (v2 Table 2), J/J-last: VOST 50.9/36.7, VSCOS 75.9/72.2, M³-VOS 74.1/64.1, DAVIS17 85.6/82.6. Full system: action/object accuracy 81.8/72.3, temporal P/R 43.1/20.4, spatiotemporal recall 12.0, overall recall 6.5. Semantic accuracies are conditional on successful temporal/spatial matches, not end-to-end state accuracy (v2 §4.2).
+- Ablation findings (v2): Spatiotemporal partition and filters improve base SAM2.1 VOST J/J-last from 48.4/32.4 to 50.9/36.7. SAM auto-masks, Cutie tracking, DINOv2 filtering, or Qwen reasoning reduce overall recall to 0.9/2.8/5.6/1.9, versus 6.5 full.
 - Strengths: Most direct match to individual-object tracking; handles one-to-many lineage; outputs spatial tracks and semantic transformation graph; zero-shot.
 - Limitations: Spatiotemporal partition construction costs about 7 s/frame on VOST with one RTX A6000 (v2 §4.3); this is not a verified total including all VLM calls. Short benchmarks; transformations are inferred mainly from newly emerged/missed tracks; low temporal and overall recall; upstream false positives cascade; not cooking-specific.
 - Assumptions: Initial mask supplied; short-term motion is smooth; descendants remain spatially close and semantically related; tracker false negatives expose transformations.
@@ -202,21 +180,14 @@ Sun, Yang, Sun, and Hariharan. [Tracking and Understanding Object Transformation
 
 ### 7. MOSCATO
 
-Zameni, Shen, and Elhamifar. [MOSCATO: Predicting Multiple Object State Change Through Actions](https://openaccess.thecvf.com/content/ICCV2025/html/Zameni_MOSCATO_Predicting_Multiple_Object_State_Change_Through_Actions_ICCV_2025_paper.html), ICCV 2025, pp. 11600–11611. Added because it now anchors ChefOST evaluation.
+Zameni, Shen, and Elhamifar. [MOSCATO: Predicting Multiple Object State Change Through Actions](https://openaccess.thecvf.com/content/ICCV2025/html/Zameni_MOSCATO_Predicting_Multiple_Object_State_Change_Through_Actions_ICCV_2025_paper.html), ICCV 2025, pp. 11600–11611.
 
 - Task: Recognize framewise states of multiple objects throughout long cooking videos; multiple states may apply simultaneously. This concerns observed-video state recognition despite “predicting” in the title.
 - Method/supervision: Training action annotations feed an LLM/VLM Pseudo-Label Acquisition pipeline; a Multiple Object State Prediction network learns from those labels, and State–Action Interaction refines state predictions using predicted actions. [Paper](https://openaccess.thecvf.com/content/ICCV2025/papers/Zameni_MOSCATO_Predicting_Multiple_Object_State_Change_Through_Actions_ICCV_2025_paper.pdf).
 - Data: CMU, EGTEA and EgoPER; automatically generated training labels and manually annotated test ground truth. The release describes state arrays on a 10 fps annotation timeline, not the raw video's frame rate. [Dataset documentation](https://github.com/eelhami/iccv25_moscato).
 - Metrics: Framewise F1-max/mAP and temporal segment F1 at overlap thresholds 0.1, 0.25 and 0.5. They are not interchangeable with ChefOST's frame-averaged multilabel precision and recall (detail). [Evaluation documentation](https://github.com/eelhami/iccv25_moscato).
-- ChefOST relevance: The local `MOSCATO/` copy and `chefOST-data/MOSCATO/` provide annotations/vocabularies, not videos, features or the paper's model implementation. Check [current evaluation questions](#reconciliation-with-current-work) for alignment, normalization and scoring issues. This is a multi-state benchmark, not evidence of persistent instance lineage.
+- ChefOST relevance: Use [chefOST-data/main](https://github.com/chefOST/chefOST-data/blob/main/README.md) for annotations and vocabularies and [Evaluation](Evaluation.md) for shared scoring definitions. Multi-state recognition does not itself establish persistent instance lineage.
 
-## Newer candidate: FluxGraph
+## FluxGraph
 
-Sun and Hariharan. [Efficient Tracking and Understanding Object Transformations](https://arxiv.org/abs/2607.19743), July 22, 2026 preprint. Abstract-level addition, not a full review: FluxGraph uses SAM2 multi-mask disagreement to trigger transformation handling and avoids tracking every scene entity. The authors report about 3.3× faster inference on VOST with preserved state-graph quality. This makes it relevant to ChefOST's efficiency priority; it has not been selected or evaluated by ChefOST. Its runtime protocol should be checked before comparing it with the original TubeletGraph timing.
-
-## Provenance and corrections
-
-- The supplied PDF covers the research definition (p. 1), literature selection (pp. 1–2), synthesis (p. 3), VidOSC (pp. 3–4), SPOC (pp. 4–5), OSCA (pp. 5–6), OSCAR (pp. 6–7), Jelodar (pp. 7–8) and TubeletGraph (pp. 8–9). The “claim locations” above refer to the underlying papers, not these review pages; they are inherited unless a version/correction is stated.
-- OSCAR's correct DOI is `10.1145/3663547.3746318`, verified against the [institutional publication record](https://ink.library.smu.edu.sg/sis_research/10477/). The PDF's `10.1145/3746027.3755771` identifies a different recipe-dataset paper; it is not another OSCAR version.
-- Targeted primary-source checks corrected Jelodar's taxonomy/training split and OSCAR's citation, duration attribution and claim locations; clarified VidOSC's future-frame context, OSCA's version/split, SPOC's current baseline/venue and inconsistent counts, and TubeletGraph's versioned scores, conditional metrics and timing scope. Unchanged details remain inherited review notes, not a claim of exhaustive verification.
-- Project goals follow the supplied announcements through September 23, 2026 (latest technical update: September 13), the September 26 MOSCATO ground-truth correction, and subsequent user instructions. The local workspace README retains assignments and project context; it is not part of this published review. Newer explicit decisions take precedence. Update the short goals here when scope changes, rather than maintaining competing copies in entry-point READMEs.
+Sun and Hariharan. [Efficient Tracking and Understanding Object Transformations](https://arxiv.org/abs/2607.19743), 2026 preprint. The abstract describes using SAM2 multi-mask disagreement to trigger transformation handling instead of tracking every scene entity. The authors report about 3.3× faster inference on VOST with preserved state-graph quality. Compare runtime protocols before comparing this result with TubeletGraph timing.
