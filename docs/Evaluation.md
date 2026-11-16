@@ -27,6 +27,6 @@ MOSCATO's published segment F1 is a different metric.
 
 Example: GT changes at 10, 20 and 34 seconds have gaps 10 and 14 seconds, so `δ = 2 s`. Predictions at 11, 22 and 40 seconds yield two matches, one miss and one false alarm: `F1 = 4/6 ≈ 0.667`.
 
-Store with the W&B run the dataset/split and annotation revision, object mapping, label normalization, timestamp/alignment rule, model reporting frequency, `N`, `δ` in seconds, and TP/FP/FN. Use the declared annotation timeline (MOSCATO: 10 fps), not raw-video frame indices. Fix these choices across compared models.
+Store with the W&B run the dataset/split and annotation revision, object mapping, label normalization, timestamp/alignment rule, model reporting frequency, `N`, `δ` in seconds, and TP/FP/FN. Fix these choices across compared models.
 
 This tolerance measures variation in GT change spacing, not annotation uncertainty or a confidence interval. Long or irregular gaps can widen it substantially; scores from different splits may use different tolerances. Correctly timed but semantically wrong changes can earn timing credit; precision, detail and cosine similarity assess state content separately.

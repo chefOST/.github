@@ -184,7 +184,7 @@ Zameni, Shen, and Elhamifar. [MOSCATO: Predicting Multiple Object State Change T
 
 - Task: Recognize framewise states of multiple objects throughout long cooking videos; multiple states may apply simultaneously. This concerns observed-video state recognition despite “predicting” in the title.
 - Method/supervision: Training action annotations feed an LLM/VLM Pseudo-Label Acquisition pipeline; a Multiple Object State Prediction network learns from those labels, and State–Action Interaction refines state predictions using predicted actions. [Paper](https://openaccess.thecvf.com/content/ICCV2025/papers/Zameni_MOSCATO_Predicting_Multiple_Object_State_Change_Through_Actions_ICCV_2025_paper.pdf).
-- Data: CMU, EGTEA and EgoPER; automatically generated training labels and manually annotated test ground truth. The release describes state arrays on a 10 fps annotation timeline, not the raw video's frame rate. [Dataset documentation](https://github.com/eelhami/iccv25_moscato).
+- Data: CMU, EGTEA and EgoPER; automatically generated training labels and manually annotated test ground truth. [Dataset documentation](https://github.com/eelhami/iccv25_moscato).
 - Metrics: Framewise F1-max/mAP and temporal segment F1 at overlap thresholds 0.1, 0.25 and 0.5. They are not interchangeable with ChefOST's frame-averaged multilabel precision and recall (detail). [Evaluation documentation](https://github.com/eelhami/iccv25_moscato).
 - ChefOST relevance: Use [chefOST-data/main](https://github.com/chefOST/chefOST-data/blob/main/README.md) for annotations and vocabularies and [Evaluation](Evaluation.md) for shared scoring definitions. Multi-state recognition does not itself establish persistent instance lineage.
 
