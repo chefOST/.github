@@ -26,6 +26,8 @@ Use annotations and vocabularies from `chefOST-data/main` and videos from its li
 
 Runs, predictions, scores and artifacts belong in the model's W&B projects linked from its `main` README. Store code/data revisions, configuration and metric details with the run in W&B, not in repository run reports. Do not describe inference outputs as evaluation scores.
 
+All benchmark evaluation code, prediction-to-evaluation adapters, metric tests and scoring workflows belong in [chefOST-data](https://github.com/chefOST/chefOST-data). No other repository branch may retain a separate evaluator or launch benchmark scoring. Model repositories produce raw predictions; the shared evaluator consumes them. Model inference mode and training-loss monitoring are not benchmark evaluation workflows.
+
 ## Code changes
 
 Use `<first-name>/<short-topic>` branches in the relevant repository. Keep changes focused and validate the behavior they affect. Use PRs for shared code changes; coordinate before rewriting a shared branch. Shared documentation changes belong on `main`.
