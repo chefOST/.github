@@ -2,6 +2,8 @@
 
 Use frame-averaged precision, recall (detail), cosine similarity and state-change timing F1. These definitions govern shared comparisons; a paper's metrics or an implementation's outputs do not redefine them.
 
+All evaluation code, adapters, metric tests and scoring workflows live in [chefOST-data](https://github.com/chefOST/chefOST-data). Other repositories and their branches export raw predictions and link to this evaluator; they must not maintain or launch separate scoring implementations.
+
 ## Scope and timelines
 
 Evaluate the videos available in the [shared R2 release](https://github.com/chefOST/chefOST-data#videos), using manually annotated evaluation ground truth and vocabularies from `chefOST-data/main`. Evaluate ingredients only, with ingredient identities and representations taken from the ground-truth annotations. Keep training pseudo-labels separate from evaluation ground truth. Record the R2 manifest, evaluated video/ingredient list, and annotation/vocabulary revisions with the run.
@@ -10,15 +12,17 @@ For each ingredient, the outer evaluation bounds are the first and last source f
 
 Each model window's output is a complete replacement state set, not an incremental update to the preceding set. Project that set onto the ground-truth frames covered by its window using verified source-frame timestamps. Record window boundaries and alignment; differing input/reporting rates do not change the every-frame scoring grid.
 
+For VidOSC, broadcast the same native prediction stream to every annotated ingredient in the video and report all ingredient scores. Do not select a best-scoring ingredient or use GT to assign the stream. This measures the broadcast adaptation's limitations; a high score for one ingredient does not establish which ingredient the model intended to track.
+
 Unavailable initial state estimates are excluded neutrally. Declare and report the initial unavailable interval from the native output/initialization support before thresholding or mapping. An empty set produced by a threshold, an unmapped label, or a later abstention does not extend that initial exclusion. Missing predictions after the initial exclusion receive zero recall on frames with known ground truth. Report excluded support and undefined scores rather than silently treating them as correct predictions.
 
 ## Probability threshold sweeps
 
-Evaluate both MOSP (the MOSCATO model) and VidOSC over multiple declared probability thresholds. At each threshold `tau`, select every native state candidate whose score satisfies `p(s) >= tau`. Threshold before vocabulary mapping, then deduplicate mapped canonical states. Reuse the same selected candidates for both precision/recall mapping variants below. Do not force a top-one prediction when no state passes.
+Evaluate both MOSP (the MOSCATO model) and VidOSC at `tau = 0.25, 0.5, 0.75`. At each threshold, select every native state candidate whose score satisfies `p(s) >= tau`. Threshold before vocabulary mapping, then deduplicate mapped canonical states. Reuse the same selected candidates for both precision/recall mapping variants below. Do not force a top-one prediction when no state passes.
 
 MOSP supplies independent sigmoid state scores; VidOSC supplies softmax scores over competing labels. The sweep applies to both, but their probabilities are not assumed to be equally calibrated, and multiple selected VidOSC labels can reflect competing alternatives. A common numerical threshold does not imply equivalent confidence.
 
-Freeze and record each method's threshold grid before inspecting evaluation results, and report precision/recall at every threshold. Do not choose a different threshold per test video or present independently maximized precision and recall as one operating point. Claude and TubeletGraph semantic outputs do not supply comparable state probabilities; detector/mask confidence is not a substitute.
+Report precision/recall at every threshold. Do not choose a different threshold per test video or present independently maximized precision and recall as one operating point. Claude and TubeletGraph semantic outputs do not supply comparable state probabilities; detector/mask confidence is not a substitute.
 
 ## Framewise precision and recall
 
@@ -34,15 +38,17 @@ Average per-frame ratios equally within each ingredient, then average ingredient
 Report two versions of discrete precision and recall, under the same frames, threshold, and aggregation:
 
 - **Vocabulary-only precision/recall:** use canonical labels and only the supplied `all2one` mappings in the [vocabulary files](https://github.com/chefOST/chefOST-data#vocabularies). Preserve multiword labels as units. Do not introduce new semantic equivalences in this version.
-- **Model-assisted precision/recall:** allow semantic mapping of saved predicted state labels/descriptions into the same canonical vocabulary, using a fixed mapper such as a stronger GPT model. The mapper receives predicted text and the allowed vocabulary, not ground-truth states/timelines or additional video evidence. It normalizes what the model said; it must not invent omitted states or correct predictions from knowledge of the task.
+- **Model-assisted precision/recall:** use `gpt-6.2-sol` to map saved predicted state labels/descriptions into the same canonical vocabulary. The mapper receives predicted text and the allowed vocabulary, not ground-truth states/timelines or additional video evidence. It normalizes what the model said; it must not invent omitted states or correct predictions from knowledge of the task.
 
 Keep ground truth fixed between versions. Use the same model-assisted mapper and input format across methods; cache its mapping outputs so a threshold sweep does not repeatedly resample mappings. Record raw predictions, mappings, mapper model/version, prompt, generation settings, and vocabulary revision with the scores. Label the assisted results explicitly because the mapper contributes to the evaluated system.
 
-The exact dynamic mapper and the treatment of unmatched or partially mapped predictions in the precision denominator remain to be specified before scoring. An unmatched prediction receives no exact-match credit; do not silently discard it without an explicit, shared policy. These choices do not reopen the canonical vocabulary or its supplied mappings.
+Retain unmatched predicted labels as incorrect predictions in the precision denominator; they receive no intersection credit. Preserve an unmatched remainder when a description is only partially mapped rather than silently deleting that content. Deduplicate identical predictions and canonical matches. Empty native output is an empty set, not a positive state inferred from an empty-string vocabulary entry.
 
 ## Cosine similarity and speed
 
-Use Qwen 8B text embeddings for cosine similarity. Record the exact checkpoint/revision, embedding instructions and normalization with the experiment in W&B. The comparison unit (individual state phrases or complete state sets), text construction, empty-output handling and similarity aggregation still need an explicit shared specification. Qwen embedding similarity is distinct from the GPT-assisted label-mapping variant above.
+Use `Qwen/Qwen3-Embedding-8B`. For each eligible ingredient/frame, embed the complete GT label set into one vector and the complete native output label set into another. Serialize each set as a JSON array of sorted unique labels with Unicode preserved, retaining multiword labels. Use the same text encoding for both sides and record the model revision, embedding instructions and normalization. Do not replace native output text with GPT-corrected labels for this metric.
+
+Compute `cos_t = dot(e_GT, e_output) / (norm(e_GT) * norm(e_output))`, sum over eligible frames and divide by their count. Apply the same bounds, initial exclusions and unknown-GT exclusions as the discrete metrics. An empty prediction after the initial exclusion contributes zero; a zero-norm model embedding is an error, not a valid score. Then average ingredients equally within each video and videos equally overall, as for precision/recall. Cache embeddings for repeated label sets. This is set-description similarity, not an average of individual label-pair similarities.
 
 Measure wall-clock latency and throughput separately from state accuracy. Distinguish offline temporal context from causal online inference.
 
