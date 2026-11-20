@@ -8,7 +8,11 @@ All evaluation code, adapters, metric tests and scoring workflows live in [chefO
 
 Evaluate the videos available in the [shared R2 release](https://github.com/chefOST/chefOST-data#videos), using manually annotated evaluation ground truth and vocabularies from `chefOST-data/main`. Evaluate ingredients only, with ingredient identities and representations taken from the ground-truth annotations. Keep training pseudo-labels separate from evaluation ground truth. Record the R2 manifest, evaluated video/ingredient list, and annotation/vocabulary revisions with the run.
 
+TubeletGraph uses the explicitly labeled four-video CMU comparison subset: `S25_Brownie_7150991-763`, `S16_Eggs_7150991-858`, `S55_Pizza_7150991-292`, and `S31_Sandwich_7150991-1`. Compare methods on that same subset, separately from their full-release results; retain all ingredient scores. Declare the subset and omitted videos in each manifest.
+
 For each ingredient, the outer evaluation bounds are the first and last source frames in which ground truth identifies it. Score every ground-truth frame within those bounds. Frames with unknown or empty ground-truth state annotations are irrelevant: predictions there receive neither reward nor penalty. Do not infer valid negative labels from an annotation gap.
+
+The released GT arrays use source frames directly: row `i` corresponds to zero-based source frame `i`. Convert frames to seconds with each video's actual source FPS, not an assumed 10 FPS. Record that annotation convention separately from prediction sampling/alignment and any visual calibration evidence.
 
 Each model window's output is a complete replacement state set, not an incremental update to the preceding set. Project that set onto the ground-truth frames covered by its window using verified source-frame timestamps. Record window boundaries and alignment; differing input/reporting rates do not change the every-frame scoring grid.
 
