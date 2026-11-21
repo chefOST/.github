@@ -24,7 +24,7 @@ Keep repository `AGENTS.md` files short: direct agents to the canonical `main` R
 
 Use annotations and vocabularies from `chefOST-data/main` and videos from its linked R2 location. Keep credentials, downloaded data, features, checkpoints, environments and generated outputs out of ordinary Git history.
 
-Runs, predictions, scores and artifacts belong in the model's W&B projects linked from its `main` README. Store code/data revisions, configuration and metric details with the run in W&B, not in repository run reports. Do not describe inference outputs as evaluation scores.
+Model inference runs and predictions belong in the model's W&B projects linked from its `main` README. Benchmark evaluation runs, scores and derived artifacts belong in the shared [chefOST/full-run-evals](https://wandb.ai/chefOST/full-run-evals) project. Store code/data revisions, configuration and metric details with the run in W&B, not in repository run reports. Do not describe inference outputs as evaluation scores.
 
 All benchmark evaluation code, prediction-to-evaluation adapters, metric tests and scoring workflows belong in [chefOST-data](https://github.com/chefOST/chefOST-data). No other repository branch may retain a separate evaluator or launch benchmark scoring. Model repositories produce raw predictions; the shared evaluator consumes them. Model inference mode and training-loss monitoring are not benchmark evaluation workflows.
 
