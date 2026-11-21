@@ -4,6 +4,8 @@ Use frame-averaged precision, recall (detail), cosine similarity and state-chang
 
 All evaluation code, adapters, metric tests and scoring workflows live in [chefOST-data](https://github.com/chefOST/chefOST-data). Other repositories and their branches export raw predictions and link to this evaluator; they must not maintain or launch separate scoring implementations.
 
+Publish benchmark runs, scores and derived artifacts to [chefOST/full-run-evals](https://wandb.ai/chefOST/full-run-evals). Group comparisons by protocol and video subset; record campaign, model variant, thresholds, mapping settings, embedding revision and input artifact hashes. Reference the original model-project inference artifacts as provenance.
+
 ## Scope and timelines
 
 Evaluate the videos available in the [shared R2 release](https://github.com/chefOST/chefOST-data#videos), using manually annotated evaluation ground truth and vocabularies from `chefOST-data/main`. Evaluate ingredients only, with ingredient identities and representations taken from the ground-truth annotations. Keep training pseudo-labels separate from evaluation ground truth. Record the R2 manifest, evaluated video/ingredient list, and annotation/vocabulary revisions with the run.
